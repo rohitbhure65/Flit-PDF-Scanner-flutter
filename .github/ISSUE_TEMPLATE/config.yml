@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: mailto:rohitbhure.cse@gmail.com?subject=FlitPDF%20Security%20Report
+    about: Report vulnerabilities privately by email instead of opening a public issue.

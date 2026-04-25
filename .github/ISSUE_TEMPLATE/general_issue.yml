@@ -1,0 +1,44 @@
+name: General issue
+description: Start a scoped discussion about docs, maintenance, cleanup, or contributor workflow
+title: "[Issue]: "
+labels:
+  - triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for structured project issues that are not bug reports or feature requests.
+  - type: textarea
+    id: topic
+    attributes:
+      label: Topic
+      description: What should the project discuss or improve?
+      placeholder: The documentation for local setup is missing ...
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Documentation
+        - Contributor experience
+        - Refactor / maintenance
+        - Testing
+        - CI / release process
+        - Community process
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Share background, current state, or why this matters now.
+      placeholder: This became noticeable when ...
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested next step
+      description: What outcome or action would be most helpful?
+      placeholder: We should add ...

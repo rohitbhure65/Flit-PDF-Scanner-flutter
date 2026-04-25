@@ -1,0 +1,184 @@
+name: flitpdf
+description: "FlitPDF is a mobile application that provides PDF processing and
+  document management tools. The app allows users to scan documents, convert
+  images to PDF, compress files, and perform other document-related operations
+  locally on their device."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.8
+
+  # State management
+  get: ^4.6.6
+
+  # File handling
+  file_picker: ^8.0.0+1
+  path_provider: ^2.1.2
+
+  # Permissions
+  permission_handler: ^11.3.1
+
+  # Image handling
+  image_picker: ^1.1.2
+
+  # Image processing
+  image: ^4.2.0
+  flutter_image_compress: ^2.3.0
+
+  # Document scanner
+  flutter_doc_scanner: ^0.0.20
+
+  # PDF handling
+  pdf: ^3.11.0
+
+  # UI enhancements
+  flutter_svg: ^2.0.10+1
+  carousel_slider: ^5.1.0
+  animated_notch_bottom_bar: ^1.0.0
+
+  # Storage
+  disk_space_plus: ^0.2.6
+  gal: ^2.3.0
+
+  # Utils
+  intl: ^0.19.0
+  share_plus: ^7.1.0
+  open_filex: ^4.5.0
+  flutter_pdfview: ^1.4.4
+  introduction_screen: ^4.0.0
+  shared_preferences: ^2.3.2
+  rive: ^0.13.20
+  lottie: ^3.3.2
+  path: ^1.9.1
+  in_app_update: ^4.2.5
+  in_app_review: ^2.0.11
+
+  # Firebase
+  firebase_core: ^3.8.0
+  firebase_auth: ^5.7.0
+  google_sign_in: ^7.2.0
+  cached_network_image: ^3.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_launcher_icons: ^0.14.4
+  flutter_lints: ^6.0.0
+
+flutter_launcher_icons:
+  image_path: "assets/icon/icon.png"
+  android: true
+  ios: false
+  min_sdk_android: 21
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  # To add assets to your application, add an assets section, like this:
+  assets:
+    - assets/animations/12010-22859-social-media-marketing.riv
+    - assets/animations/14616-27585-business-startup-project-launch-successful-idea.riv
+    - assets/animations/5078-10234-search-rive.riv
+    - assets/animations/filetransfer.json
+    - assets/animations/Files.json
+    - assets/animations/pdfscanner.json
+    - assets/animations/multifile.json
+    - assets/fonts/
+    - assets/icon/icon.png
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins/Poppins-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Poppins/Poppins-ThinItalic.ttf
+          style: italic
+          weight: 100
+        - asset: assets/fonts/Poppins/Poppins-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/Poppins/Poppins-ExtraLightItalic.ttf
+          style: italic
+          weight: 200
+        - asset: assets/fonts/Poppins/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins/Poppins-LightItalic.ttf
+          style: italic
+          weight: 300
+        - asset: assets/fonts/Poppins/Poppins-Regular.ttf
+        - asset: assets/fonts/Poppins/Poppins-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Poppins/Poppins-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Poppins/Poppins-MediumItalic.ttf
+          style: italic
+          weight: 500
+        - asset: assets/fonts/Poppins/Poppins-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Poppins/Poppins-SemiBoldItalic.ttf
+          style: italic
+          weight: 600
+        - asset: assets/fonts/Poppins/Poppins-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Poppins/Poppins-BoldItalic.ttf
+          style: italic
+          weight: 700
+        - asset: assets/fonts/Poppins/Poppins-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/Poppins/Poppins-ExtraBoldItalic.ttf
+          style: italic
+          weight: 800
+        - asset: assets/fonts/Poppins/Poppins-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Poppins/Poppins-BlackItalic.ttf
+          style: italic
+          weight: 900
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

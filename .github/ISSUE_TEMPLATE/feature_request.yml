@@ -1,0 +1,61 @@
+name: Feature request
+description: Suggest an improvement or new capability for FlitPDF
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing an idea.
+        Focus on the problem and user value first, then the implementation idea.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or opportunity
+      description: What user need or pain point does this address?
+      placeholder: It is hard to ...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      placeholder: I would like FlitPDF to ...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Other ways to solve this, if any.
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Expected impact
+      options:
+        - Small quality-of-life improvement
+        - Moderate feature improvement
+        - Major new capability
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Product area
+      options:
+        - Scanner
+        - PDF tools
+        - File viewer
+        - Authentication
+        - Settings
+        - Build / setup
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional context
+      placeholder: Mockups, references, constraints, or edge cases.
