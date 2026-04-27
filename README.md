@@ -5,13 +5,13 @@
     <img src="https://img.shields.io/badge/Flutter-3.11.0+-02569B?style=for-the-badge&logo=flutter&logoColor=white" />
   </a>
  <a href="https://github.com/rohitbhure65/Flit-PDF-Scanner-flutter/releases">
-  <img src="https://img.shields.io/github/v/release/rohitbhure65/Flit-PDF-Scanner-flutter?include_releases&style=for-the-badge&logo=github&logoColor=white" />
+  <img src="https://img.shields.io/github/v/release/rohitbhure65/Flit-PDF-Scanner-flutter?include_prereleases&style=for-the-badge&logo=github&logoColor=white" />
 </a>
   <a href="https://pub.dev/packages/pdf">
     <img src="https://img.shields.io/badge/Dart-3.11.0+-0175C2?style=for-the-badge&logo=dart&logoColor=white" />
   </a>
   <a href="https://discord.gg/MkwJkHPmbt">
-    <img src="https://img.shields.io/discord/1456350064065904867?label=Discord&logo=discord&logoColor=white&color=5865F2&style=for-the-badge" />
+    <img src="https://img.shields.io/discord/1336694184400388212?label=Discord&logo=discord&logoColor=white&color=5865F2&style=for-the-badge" />
   </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" />
@@ -210,7 +210,7 @@ See [TRADEMARKS.md](TRADEMARKS.md) for branding guidelines.
 ## Contact
 
 - **Email**: rohitbhure.cse@gmail.com
-- **GitHub**: https://github.com/flitpdf/flitpdf
+- **GitHub**: https://github.com/rohitbhure65/Flit-PDF-Scanner-flutter
 
 ## Acknowledgments
 
