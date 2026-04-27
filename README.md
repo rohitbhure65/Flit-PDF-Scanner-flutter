@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/Flutter-3.11.0+-02569B?style=for-the-badge&logo=flutter&logoColor=white" />
   </a>
  <a href="https://github.com/rohitbhure65/Flit-PDF-Scanner-flutter/releases">
-  <img src="https://img.shields.io/github/v/release/rohitbhure65/Flit-PDF-Scanner-flutter?include_prereleases&style=for-the-badge&logo=github&logoColor=white" />
+  <img src="https://img.shields.io/github/v/release/rohitbhure65/Flit-PDF-Scanner-flutter?include_releases&style=for-the-badge&logo=github&logoColor=white" />
 </a>
   <a href="https://pub.dev/packages/pdf">
     <img src="https://img.shields.io/badge/Dart-3.11.0+-0175C2?style=for-the-badge&logo=dart&logoColor=white" />
