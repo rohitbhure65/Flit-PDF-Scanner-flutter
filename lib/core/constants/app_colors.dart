@@ -13,7 +13,7 @@ class AppColors {
   static const Color secondaryDark = Color(0xFFD84315);
 
   // Neutral Colors - Light Mode
-  static const Color background = Color(0xFFF8FAFC);
+  static const Color background = Color(0xFFFFFFFF);
   static const Color surface = Colors.white;
   static const Color card = Colors.white;
 
