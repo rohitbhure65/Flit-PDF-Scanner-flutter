@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flitpdf/core/constants/app_colors.dart';
+import 'package:flitpdf/core/services/file_service.dart';
 import 'package:flitpdf/shared/controllers/main_shell_controller.dart';
 import 'package:flitpdf/shared/widgets/loading/pdf_shimmer.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +29,52 @@ class _ScannerScreenState extends State<ScannerScreen> {
   );
   final ImagePicker _picker = ImagePicker();
   final List<String> _scannedImages = <String>[];
+  final List<String> _persistedTempImages = <String>[];
   bool _isProcessing = false;
   bool _isImportingImages = false;
   int? _draggingIndex;
   int? _targetIndex;
+  Directory? _tempScanDirectory;
+
+  @override
+  void dispose() {
+    _clearTempDirectory();
+    super.dispose();
+  }
+
+  Future<Directory> _getOrCreateTempDirectory() async {
+    _tempScanDirectory ??= await Directory.systemTemp.createTemp(
+      'flitpdf_scan_',
+    );
+    return _tempScanDirectory!;
+  }
+
+  Future<void> _clearTempDirectory() async {
+    if (_tempScanDirectory != null) {
+      try {
+        await _tempScanDirectory!.delete(recursive: true);
+      } catch (_) {}
+      _tempScanDirectory = null;
+    }
+  }
+
+  Future<String?> _persistImageToTemp(String sourcePath) async {
+    try {
+      final Directory tempDir = await _getOrCreateTempDirectory();
+      final String fileName =
+          'page_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final String destPath = '${tempDir.path}/$fileName';
+
+      final File sourceFile = File(sourcePath);
+      if (await sourceFile.exists()) {
+        await sourceFile.copy(destPath);
+        return destPath;
+      }
+    } catch (e) {
+      debugPrint('Error persisting image to temp: $e');
+    }
+    return null;
+  }
 
   Future<void> _openDocumentScanner() async {
     await Navigator.push(
@@ -155,12 +198,29 @@ class _ScannerScreenState extends State<ScannerScreen> {
       return;
     }
 
+    // Persist each new image immediately to prevent data loss on crash
+    final List<String> persistedPaths = <String>[];
+    for (final String path in newPaths) {
+      final String? persistedPath = await _persistImageToTemp(path);
+      if (persistedPath != null) {
+        persistedPaths.add(persistedPath);
+      }
+    }
+
+    if (!mounted) return;
+
+    if (persistedPaths.isEmpty) {
+      _showSnackBar('Failed to save document pages');
+      return;
+    }
+
     setState(() {
-      _scannedImages.addAll(newPaths);
+      _scannedImages.addAll(persistedPaths);
+      _persistedTempImages.addAll(persistedPaths);
     });
 
-    final String pageLabel = newPaths.length == 1 ? 'page' : 'pages';
-    _showSnackBar('${newPaths.length} $pageLabel added successfully');
+    final String pageLabel = persistedPaths.length == 1 ? 'page' : 'pages';
+    _showSnackBar('${persistedPaths.length} $pageLabel added successfully');
   }
 
   Future<List<String>> _normalizeScannedPaths(
@@ -231,7 +291,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
               },
             ),
           );
-        } catch (_) {
+        } catch (e) {
+          debugPrint('Error loading image $imagePath: $e');
           continue;
         }
       }
@@ -254,15 +315,26 @@ class _ScannerScreenState extends State<ScannerScreen> {
       final File file = File('${output.path}/FlitPDFScanner_$timestamp.pdf');
       await file.writeAsBytes(await pdf.save());
 
-      _showPdfCreatedSnackBar(file);
+      // Save to Documents folder for user access
+      final String? savedPath = await FileService().saveFileToDocuments(
+        file.path,
+        fileName: 'FlitPDFScanner_$timestamp',
+      );
+
+      _showPdfCreatedSnackBar(savedPath != null ? File(savedPath) : file);
 
       if (mounted) {
         setState(() {
           _scannedImages.clear();
+          _persistedTempImages.clear();
         });
       }
+
+      // Clear temp directory after successful conversion
+      await _clearTempDirectory();
     } catch (e) {
       _showSnackBar('Error creating PDF: $e');
+      // Keep images in memory so user can retry
     } finally {
       if (mounted) {
         setState(() {
@@ -475,7 +547,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             'Smart Document Scanner',
             style: TextStyle(
               fontSize: 24,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
               color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
               letterSpacing: -0.5,
             ),
@@ -993,24 +1065,23 @@ class _ScannerScreenState extends State<ScannerScreen> {
       ),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: OutlinedButton.icon(
+          SizedBox(
+            width: 56,
+            child: OutlinedButton(
               onPressed: _showAddMoreOptions,
-              icon: const Icon(Icons.add_photo_alternate),
-              label: const Text('Add More'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.all(16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
+              child: const Icon(Icons.add_photo_alternate),
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 2,
             child: ElevatedButton.icon(
               onPressed: _isProcessing ? null : _convertToPdf,
               icon: _isProcessing

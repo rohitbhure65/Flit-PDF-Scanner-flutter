@@ -259,7 +259,8 @@ Uint8List _replacePdfImages(
   }
 }
 
-/// Compress PDF to target size by iteratively reducing quality
+/// Compress PDF to target size using binary search on quality parameter
+/// Returns compressed PDF within ±10% of target size
 Future<Uint8List> _compressToTargetSizeIsolate(
   Uint8List pdfBytes,
   double targetBytes,
@@ -268,18 +269,53 @@ Future<Uint8List> _compressToTargetSizeIsolate(
     return pdfBytes;
   }
 
-  for (int quality = 95; quality >= 30; quality -= 10) {
+  // Binary search for optimal quality value
+  int minQuality = 10;
+  int maxQuality = 100;
+  Uint8List bestResult = pdfBytes;
+
+  // Allow ±10% tolerance on target size
+  final double minAcceptableSize = targetBytes * 0.9;
+  final double maxAcceptableSize = targetBytes * 1.1;
+
+  while (minQuality <= maxQuality) {
+    final int midQuality = (minQuality + maxQuality) ~/ 2;
     final Uint8List compressed = await _compressWithQualityIsolate(
       pdfBytes,
-      quality,
+      midQuality,
     );
 
-    if (compressed.lengthInBytes <= targetBytes) {
+    final int compressedSize = compressed.lengthInBytes;
+
+    // Check if we're within acceptable range
+    if (compressedSize >= minAcceptableSize &&
+        compressedSize <= maxAcceptableSize) {
       return compressed;
+    }
+
+    // Track the best result that's under target
+    if (compressedSize <= targetBytes &&
+        (bestResult == pdfBytes || compressedSize > bestResult.lengthInBytes)) {
+      bestResult = compressed;
+    }
+
+    // Adjust search range
+    if (compressedSize > targetBytes) {
+      // Need more compression - lower quality
+      maxQuality = midQuality - 1;
+    } else {
+      // Can use less compression - higher quality
+      minQuality = midQuality + 1;
     }
   }
 
-  return await _compressWithQualityIsolate(pdfBytes, 20);
+  // Return best result under target, or lowest quality attempt
+  if (bestResult != pdfBytes) {
+    return bestResult;
+  }
+
+  // Fallback: try very low quality if nothing worked
+  return await _compressWithQualityIsolate(pdfBytes, 10);
 }
 
 class ToolsService {

@@ -404,13 +404,18 @@ class _FilesScreenState extends State<FilesScreen> {
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 elevation: 0,
                 flexibleSpace: FlexibleSpaceBar(
-                  titlePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  titlePadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                   centerTitle: false,
                   title: Text(
                     'My Files',
                     style: TextStyle(
-                      color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
-                      fontWeight: FontWeight.w900,
+                      color: isDark
+                          ? AppColors.textPrimaryDark
+                          : AppColors.textPrimary,
+                      fontWeight: FontWeight.w700,
                       fontSize: 24,
                       letterSpacing: -1,
                     ),
@@ -424,8 +429,12 @@ class _FilesScreenState extends State<FilesScreen> {
                       });
                     },
                     icon: Icon(
-                      _isGridView ? Icons.view_list_rounded : Icons.grid_view_rounded,
-                      color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                      _isGridView
+                          ? Icons.view_list_rounded
+                          : Icons.grid_view_rounded,
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondary,
                     ),
                   ),
                   IconButton(
@@ -440,7 +449,9 @@ class _FilesScreenState extends State<FilesScreen> {
                     },
                     icon: Icon(
                       _isSearching ? Icons.close_rounded : Icons.search_rounded,
-                      color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -456,16 +467,22 @@ class _FilesScreenState extends State<FilesScreen> {
                       controller: _searchController,
                       autofocus: true,
                       style: TextStyle(
-                        color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                        color: isDark
+                            ? AppColors.textPrimaryDark
+                            : AppColors.textPrimary,
                       ),
                       decoration: InputDecoration(
                         hintText: 'Search files...',
                         hintStyle: TextStyle(
-                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
                         ),
                         prefixIcon: Icon(
                           Icons.search_rounded,
-                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
                         ),
                         suffixIcon: _searchQuery.isNotEmpty
                             ? IconButton(
@@ -477,22 +494,31 @@ class _FilesScreenState extends State<FilesScreen> {
                               )
                             : null,
                         filled: true,
-                        fillColor: isDark ? AppColors.surfaceDark : AppColors.surface,
+                        fillColor: isDark
+                            ? AppColors.surfaceDark
+                            : AppColors.surface,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide(
-                            color: isDark ? AppColors.borderDark : AppColors.border,
+                            color: isDark
+                                ? AppColors.borderDark
+                                : AppColors.border,
                           ),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
                           borderSide: BorderSide(
-                            color: isDark ? AppColors.borderDark : AppColors.border,
+                            color: isDark
+                                ? AppColors.borderDark
+                                : AppColors.border,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
-                          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+                          borderSide: const BorderSide(
+                            color: AppColors.primary,
+                            width: 2,
+                          ),
                         ),
                       ),
                     ),
@@ -516,41 +542,46 @@ class _FilesScreenState extends State<FilesScreen> {
               ),
 
               // Files List/Grid
-              _isLoadingFiles 
-                ? SliverToBoxAdapter(
-                    child: _isGridView ? _buildGridLoadingShimmer() : _buildFilesLoadingShimmer(),
-                  )
-                : _filteredFiles.isEmpty
+              _isLoadingFiles
+                  ? SliverToBoxAdapter(
+                      child: _isGridView
+                          ? _buildGridLoadingShimmer()
+                          : _buildFilesLoadingShimmer(),
+                    )
+                  : _filteredFiles.isEmpty
                   ? SliverFillRemaining(
                       hasScrollBody: false,
                       child: _buildEmptyState(),
                     )
-                  : _isGridView 
-                    ? SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        sliver: SliverGrid(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                            childAspectRatio: 0.85,
-                          ),
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) => _buildGridItem(_filteredFiles[index]),
-                            childCount: _filteredFiles.length,
-                          ),
-                        ),
-                      )
-                    : SliverPadding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        sliver: SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) => _buildFileItem(_filteredFiles[index]),
-                            childCount: _filteredFiles.length,
-                          ),
+                  : _isGridView
+                  ? SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      sliver: SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                              childAspectRatio: 0.85,
+                            ),
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) =>
+                              _buildGridItem(_filteredFiles[index]),
+                          childCount: _filteredFiles.length,
                         ),
                       ),
-              
+                    )
+                  : SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) =>
+                              _buildFileItem(_filteredFiles[index]),
+                          childCount: _filteredFiles.length,
+                        ),
+                      ),
+                    ),
+
               const SliverToBoxAdapter(child: SizedBox(height: 120)),
             ],
           ),
@@ -580,7 +611,9 @@ class _FilesScreenState extends State<FilesScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                color: isDark
+                    ? AppColors.textPrimaryDark
+                    : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 12),
@@ -590,7 +623,9 @@ class _FilesScreenState extends State<FilesScreen> {
                   : 'Try adjusting your filters or search query',
               style: TextStyle(
                 fontSize: 15,
-                color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.textSecondaryDark
+                    : AppColors.textSecondary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -601,8 +636,13 @@ class _FilesScreenState extends State<FilesScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 12,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 child: const Text('Open Settings'),
               ),
@@ -617,15 +657,20 @@ class _FilesScreenState extends State<FilesScreen> {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
     final double totalStorage = _storageInfo['total'] ?? 0.0;
     final double usedStorage = _storageInfo['used'] ?? 0.0;
-    final double usedPercentage = totalStorage > 0 ? (usedStorage / totalStorage) : 0.0;
+    final double usedPercentage = totalStorage > 0
+        ? (usedStorage / totalStorage)
+        : 0.0;
 
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isDark 
+          colors: isDark
               ? <Color>[AppColors.primary, AppColors.primaryDark]
-              : <Color>[AppColors.primary, AppColors.primary.withValues(alpha: 0.8)],
+              : <Color>[
+                  AppColors.primary,
+                  AppColors.primary.withValues(alpha: 0.8),
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -652,7 +697,7 @@ class _FilesScreenState extends State<FilesScreen> {
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w700,
                       letterSpacing: 0.5,
                     ),
                   ),
@@ -668,7 +713,10 @@ class _FilesScreenState extends State<FilesScreen> {
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
@@ -678,7 +726,7 @@ class _FilesScreenState extends State<FilesScreen> {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -714,13 +762,27 @@ class _FilesScreenState extends State<FilesScreen> {
           ),
           const SizedBox(height: 24),
           _isLoading
-              ? const Center(child: CircularProgressIndicator(color: Colors.white))
+              ? const Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    _buildStorageInfoItem(Icons.folder_rounded, 'Files', _storageInfo['files'] ?? 0),
-                    _buildStorageInfoItem(Icons.image_rounded, 'Images', _storageInfo['images'] ?? 0),
-                    _buildStorageInfoItem(Icons.description_rounded, 'Docs', _storageInfo['all'] ?? 0),
+                    _buildStorageInfoItem(
+                      Icons.folder_rounded,
+                      'Files',
+                      _storageInfo['files'] ?? 0,
+                    ),
+                    _buildStorageInfoItem(
+                      Icons.image_rounded,
+                      'Images',
+                      _storageInfo['images'] ?? 0,
+                    ),
+                    _buildStorageInfoItem(
+                      Icons.description_rounded,
+                      'Docs',
+                      _storageInfo['all'] ?? 0,
+                    ),
                   ],
                 ),
         ],
@@ -752,7 +814,7 @@ class _FilesScreenState extends State<FilesScreen> {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 14,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ],
@@ -775,19 +837,23 @@ class _FilesScreenState extends State<FilesScreen> {
               selected: isSelected,
               onSelected: (_) => _onFilterChanged(_filters[index]),
               labelStyle: TextStyle(
-                color: isSelected 
-                    ? Colors.white 
-                    : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimary),
-                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                color: isSelected
+                    ? Colors.white
+                    : (isDark
+                          ? AppColors.textPrimaryDark
+                          : AppColors.textPrimary),
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
                 fontSize: 13,
               ),
-              backgroundColor: isDark ? AppColors.surfaceDark : AppColors.surface,
+              backgroundColor: isDark
+                  ? AppColors.surfaceDark
+                  : AppColors.surface,
               selectedColor: AppColors.primary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
                 side: BorderSide(
-                  color: isSelected 
-                      ? AppColors.primary 
+                  color: isSelected
+                      ? AppColors.primary
                       : (isDark ? AppColors.borderDark : AppColors.border),
                   width: 1,
                 ),
@@ -833,6 +899,7 @@ class _FilesScreenState extends State<FilesScreen> {
     _searchController.dispose();
     super.dispose();
   }
+
   Widget _buildFilesLoadingShimmer() {
     return PdfShimmer(
       child: ListView.builder(
@@ -946,8 +1013,8 @@ class _FilesScreenState extends State<FilesScreen> {
           color: isDark ? AppColors.surfaceDark : AppColors.surface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isHighlighted 
-                ? AppColors.primary 
+            color: isHighlighted
+                ? AppColors.primary
                 : (isDark ? AppColors.borderDark : AppColors.border),
             width: isHighlighted ? 2 : 1,
           ),
@@ -979,25 +1046,53 @@ class _FilesScreenState extends State<FilesScreen> {
                 ),
                 Theme(
                   data: Theme.of(context).copyWith(
-                    cardColor: isDark ? AppColors.surfaceDark : AppColors.surface,
+                    cardColor: isDark
+                        ? AppColors.surfaceDark
+                        : AppColors.surface,
                   ),
                   child: PopupMenuButton<String>(
                     icon: Icon(
                       Icons.more_vert_rounded,
-                      color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                      color: isDark
+                          ? AppColors.textSecondaryDark
+                          : AppColors.textSecondary,
                       size: 20,
                     ),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                     onSelected: (String value) async {
                       await _handleFileAction(value, file);
                     },
-                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                      _buildPopupItem('open', Icons.open_in_new_rounded, 'Open', isDark),
-                      _buildPopupItem('share', Icons.share_rounded, 'Share', isDark),
-                      _buildPopupItem('rename', Icons.edit_rounded, 'Rename', isDark),
-                      const PopupMenuDivider(),
-                      _buildPopupItem('delete', Icons.delete_outline_rounded, 'Delete', isDark, isError: true),
-                    ],
+                    itemBuilder: (BuildContext context) =>
+                        <PopupMenuEntry<String>>[
+                          _buildPopupItem(
+                            'open',
+                            Icons.open_in_new_rounded,
+                            'Open',
+                            isDark,
+                          ),
+                          _buildPopupItem(
+                            'share',
+                            Icons.share_rounded,
+                            'Share',
+                            isDark,
+                          ),
+                          _buildPopupItem(
+                            'rename',
+                            Icons.edit_rounded,
+                            'Rename',
+                            isDark,
+                          ),
+                          const PopupMenuDivider(),
+                          _buildPopupItem(
+                            'delete',
+                            Icons.delete_outline_rounded,
+                            'Delete',
+                            isDark,
+                            isError: true,
+                          ),
+                        ],
                   ),
                 ),
               ],
@@ -1008,7 +1103,9 @@ class _FilesScreenState extends State<FilesScreen> {
               style: TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
-                color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                color: isDark
+                    ? AppColors.textPrimaryDark
+                    : AppColors.textPrimary,
                 letterSpacing: -0.2,
               ),
               maxLines: 2,
@@ -1018,7 +1115,9 @@ class _FilesScreenState extends State<FilesScreen> {
             Text(
               '${file.formattedSize} • ${file.formattedDate}',
               style: TextStyle(
-                color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                color: isDark
+                    ? AppColors.textSecondaryDark
+                    : AppColors.textSecondary,
                 fontSize: 11,
                 fontWeight: FontWeight.w500,
               ),
@@ -1044,8 +1143,8 @@ class _FilesScreenState extends State<FilesScreen> {
           color: isDark ? AppColors.surfaceDark : AppColors.surface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isHighlighted 
-                ? AppColors.primary 
+            color: isHighlighted
+                ? AppColors.primary
                 : (isDark ? AppColors.borderDark : AppColors.border),
             width: isHighlighted ? 2 : 1,
           ),
@@ -1081,7 +1180,9 @@ class _FilesScreenState extends State<FilesScreen> {
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 15,
-                      color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                      color: isDark
+                          ? AppColors.textPrimaryDark
+                          : AppColors.textPrimary,
                       letterSpacing: -0.3,
                     ),
                     maxLines: 1,
@@ -1093,7 +1194,9 @@ class _FilesScreenState extends State<FilesScreen> {
                       Text(
                         file.formattedSize,
                         style: TextStyle(
-                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -1102,13 +1205,23 @@ class _FilesScreenState extends State<FilesScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 6),
                         child: Text(
                           '•',
-                          style: TextStyle(color: isDark ? AppColors.textSecondaryDark.withValues(alpha: 0.5) : AppColors.textSecondary.withValues(alpha: 0.5)),
+                          style: TextStyle(
+                            color: isDark
+                                ? AppColors.textSecondaryDark.withValues(
+                                    alpha: 0.5,
+                                  )
+                                : AppColors.textSecondary.withValues(
+                                    alpha: 0.5,
+                                  ),
+                          ),
                         ),
                       ),
                       Text(
                         file.formattedDate,
                         style: TextStyle(
-                          color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
@@ -1125,18 +1238,43 @@ class _FilesScreenState extends State<FilesScreen> {
               child: PopupMenuButton<String>(
                 icon: Icon(
                   Icons.more_vert_rounded,
-                  color: isDark ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                  color: isDark
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondary,
                 ),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 onSelected: (String value) async {
                   await _handleFileAction(value, file);
                 },
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  _buildPopupItem('open', Icons.open_in_new_rounded, 'Open', isDark),
-                  _buildPopupItem('share', Icons.share_rounded, 'Share', isDark),
-                  _buildPopupItem('rename', Icons.edit_rounded, 'Rename', isDark),
+                  _buildPopupItem(
+                    'open',
+                    Icons.open_in_new_rounded,
+                    'Open',
+                    isDark,
+                  ),
+                  _buildPopupItem(
+                    'share',
+                    Icons.share_rounded,
+                    'Share',
+                    isDark,
+                  ),
+                  _buildPopupItem(
+                    'rename',
+                    Icons.edit_rounded,
+                    'Rename',
+                    isDark,
+                  ),
                   const PopupMenuDivider(),
-                  _buildPopupItem('delete', Icons.delete_outline_rounded, 'Delete', isDark, isError: true),
+                  _buildPopupItem(
+                    'delete',
+                    Icons.delete_outline_rounded,
+                    'Delete',
+                    isDark,
+                    isError: true,
+                  ),
                 ],
               ),
             ),
@@ -1146,7 +1284,13 @@ class _FilesScreenState extends State<FilesScreen> {
     );
   }
 
-  PopupMenuItem<String> _buildPopupItem(String value, IconData icon, String label, bool isDark, {bool isError = false}) {
+  PopupMenuItem<String> _buildPopupItem(
+    String value,
+    IconData icon,
+    String label,
+    bool isDark, {
+    bool isError = false,
+  }) {
     return PopupMenuItem<String>(
       value: value,
       child: Row(
@@ -1154,9 +1298,11 @@ class _FilesScreenState extends State<FilesScreen> {
           Icon(
             icon,
             size: 20,
-            color: isError 
-                ? AppColors.error 
-                : (isDark ? AppColors.textSecondaryDark : AppColors.textSecondary),
+            color: isError
+                ? AppColors.error
+                : (isDark
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondary),
           ),
           const SizedBox(width: 12),
           Text(
@@ -1164,9 +1310,11 @@ class _FilesScreenState extends State<FilesScreen> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: isError 
-                  ? AppColors.error 
-                  : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimary),
+              color: isError
+                  ? AppColors.error
+                  : (isDark
+                        ? AppColors.textPrimaryDark
+                        : AppColors.textPrimary),
             ),
           ),
         ],

@@ -125,7 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     color: isDark
                         ? AppColors.textPrimaryDark
                         : AppColors.textPrimary,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w700,
                     fontSize: 24,
                     letterSpacing: -1,
                   ),
@@ -228,7 +228,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           'FlitPDF',
                           style: TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w700,
                             color: isDark
                                 ? AppColors.textPrimaryDark
                                 : AppColors.textPrimary,
@@ -320,7 +320,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   _userName,
                   style: const TextStyle(
                     fontSize: 20,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w700,
                     color: Colors.white,
                     letterSpacing: -0.5,
                   ),
@@ -477,7 +477,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           'Clear Cache',
           style: TextStyle(
             color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w700,
             fontSize: 20,
             letterSpacing: -0.5,
           ),
@@ -525,7 +525,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             child: const Text(
               'Clear Cache',
-              style: TextStyle(fontWeight: FontWeight.w900),
+              style: TextStyle(fontWeight: FontWeight.w700),
             ),
           ),
         ],

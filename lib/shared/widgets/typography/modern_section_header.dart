@@ -30,8 +30,10 @@ class ModernSectionHeader extends StatelessWidget {
                 title,
                 style: TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                  fontWeight: FontWeight.w700,
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimary,
                   letterSpacing: -0.5,
                 ),
               ),

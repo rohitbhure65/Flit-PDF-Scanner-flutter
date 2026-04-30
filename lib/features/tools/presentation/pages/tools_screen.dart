@@ -57,7 +57,7 @@ class _ToolsScreenState extends State<ToolsScreen> {
                         color: isDark
                             ? AppColors.textPrimaryDark
                             : AppColors.textPrimary,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w700,
                         fontSize: 24,
                         letterSpacing: -1,
                       ),
