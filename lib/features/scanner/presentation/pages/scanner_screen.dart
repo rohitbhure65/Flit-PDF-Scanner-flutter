@@ -43,7 +43,9 @@ class _ScannerScreenState extends State<ScannerScreen> {
   }
 
   Future<Directory> _getOrCreateTempDirectory() async {
-    _tempScanDirectory ??= await Directory.systemTemp.createTemp('flitpdf_scan_');
+    _tempScanDirectory ??= await Directory.systemTemp.createTemp(
+      'flitpdf_scan_',
+    );
     return _tempScanDirectory!;
   }
 
@@ -59,7 +61,8 @@ class _ScannerScreenState extends State<ScannerScreen> {
   Future<String?> _persistImageToTemp(String sourcePath) async {
     try {
       final Directory tempDir = await _getOrCreateTempDirectory();
-      final String fileName = 'page_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final String fileName =
+          'page_${DateTime.now().millisecondsSinceEpoch}.jpg';
       final String destPath = '${tempDir.path}/$fileName';
 
       final File sourceFile = File(sourcePath);
@@ -544,7 +547,7 @@ class _ScannerScreenState extends State<ScannerScreen> {
             'Smart Document Scanner',
             style: TextStyle(
               fontSize: 24,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
               color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
               letterSpacing: -0.5,
             ),
@@ -1062,24 +1065,23 @@ class _ScannerScreenState extends State<ScannerScreen> {
       ),
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: OutlinedButton.icon(
+          SizedBox(
+            width: 56,
+            child: OutlinedButton(
               onPressed: _showAddMoreOptions,
-              icon: const Icon(Icons.add_photo_alternate),
-              label: const Text('Add More'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppColors.primary,
                 side: const BorderSide(color: AppColors.primary),
-                padding: const EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.all(16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
+              child: const Icon(Icons.add_photo_alternate),
             ),
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 2,
             child: ElevatedButton.icon(
               onPressed: _isProcessing ? null : _convertToPdf,
               icon: _isProcessing
