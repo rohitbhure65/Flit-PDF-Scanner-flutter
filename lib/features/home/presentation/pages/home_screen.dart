@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
           'FlitPDF',
           style: TextStyle(
             color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w700,
             fontSize: 24,
             letterSpacing: -1,
           ),
