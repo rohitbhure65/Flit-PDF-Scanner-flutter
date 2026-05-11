@@ -188,7 +188,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     _buildSettingsTile(
                       icon: Icons.info_rounded,
                       title: 'About Us',
-                      subtitle: 'Version 1.0.1',
+                      subtitle: 'Version 1.0.2',
                       onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute<void>(

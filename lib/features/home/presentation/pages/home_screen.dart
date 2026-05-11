@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flitpdf/core/constants/app_colors.dart';
 import 'package:flitpdf/core/services/storage_service.dart';
+import 'package:flitpdf/shared/controllers/main_shell_controller.dart';
+import 'package:flitpdf/shared/data/tool_definitions.dart' as tool_defs;
 import 'package:flitpdf/shared/widgets/cards/file_card.dart';
 import 'package:flitpdf/shared/widgets/typography/modern_section_header.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Map<String, dynamic>> getPopularTools() => tool_defs.getPopularTools();
+
   final StorageService _storageService = StorageService();
   List<RecentFileRecord> _recentFiles = <RecentFileRecord>[];
   bool _isLoadingRecentFiles = true;
@@ -244,7 +248,187 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future<void> _openToolsForTool(BuildContext context, String toolName) async {
+    // Open tool directly without navigation using bottom sheet or modal
+    await _showToolBottomSheet(context, toolName);
+  }
+
+  Future<void> _showToolBottomSheet(
+    BuildContext context,
+    String toolName,
+  ) async {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Container(
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.surfaceDark : Colors.white,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          padding: EdgeInsets.only(
+            left: 24,
+            right: 24,
+            top: 24,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 20),
+                decoration: BoxDecoration(
+                  color: isDark ? AppColors.borderDark : AppColors.border,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Icon(_getToolIcon(toolName), size: 48, color: AppColors.primary),
+              const SizedBox(height: 16),
+              Text(
+                toolName,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: isDark
+                      ? AppColors.textPrimaryDark
+                      : AppColors.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _getToolDescription(toolName),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isDark
+                      ? AppColors.textSecondaryDark
+                      : AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _navigateToTool(context, toolName);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Open Tool',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: TextButton.styleFrom(
+                    foregroundColor: isDark
+                        ? AppColors.textSecondaryDark
+                        : AppColors.textSecondary,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                  ),
+                  child: const Text('Cancel'),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  IconData _getToolIcon(String toolName) {
+    switch (toolName) {
+      case 'Image to PDF':
+        return Icons.picture_as_pdf;
+      case 'Compress PDF':
+        return Icons.compress;
+      case 'Scan PDF':
+        return Icons.document_scanner;
+      case 'Create PDF':
+        return Icons.add_circle;
+      case 'Compress Image':
+        return Icons.compress;
+      default:
+        return Icons.build;
+    }
+  }
+
+  String _getToolDescription(String toolName) {
+    switch (toolName) {
+      case 'Image to PDF':
+        return 'Convert images to PDF document quickly and easily.';
+      case 'Compress PDF':
+        return 'Reduce PDF file size without losing quality.';
+      case 'Scan PDF':
+        return 'Scan physical documents and convert to PDF.';
+      case 'Create PDF':
+        return 'Create new PDF from images or blank pages.';
+      case 'Compress Image':
+        return 'Reduce image file size while maintaining quality.';
+      default:
+        return 'Open this tool to get started.';
+    }
+  }
+
+  void _navigateToTool(BuildContext context, String toolName) {
+    // Navigate to the appropriate tool screen using MainShellController
+    final MainShellController controller = Get.find<MainShellController>();
+    
+    switch (toolName) {
+      case 'Scan PDF':
+        // Navigate to scanner tab (index 0)
+        controller.changePage(0);
+        break;
+      case 'Image to PDF':
+      case 'Compress PDF':
+      case 'Create PDF':
+      case 'Compress Image':
+        // Navigate to tools tab (index 3)
+        controller.changePage(3);
+        break;
+      default:
+        controller.changePage(3);
+    }
+  }
+
   Widget _buildBentoToolGrid(BuildContext context) {
+    final List<Map<String, dynamic>> tools = getPopularTools();
+
+    // Filter to only active/live tools
+    final List<Map<String, dynamic>> activeTools = tools.where((
+      Map<String, dynamic> t,
+    ) {
+      final bool? isActive = t['isActive'] as bool?;
+      final String? status = t['status'] as String?;
+      final bool isComingSoon = t['isComingSoon'] as bool? ?? false;
+
+      final bool matchesActive = isActive ?? true;
+      final bool matchesStatus = status == null ? true : status == 'live';
+      return !isComingSoon && matchesActive && matchesStatus;
+    }).toList();
+
+    // Limit to 4 active tools only
+    final List<Map<String, dynamic>> displayTools = activeTools
+        .take(4)
+        .toList();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GridView.count(
@@ -255,56 +439,17 @@ class _HomeScreenState extends State<HomeScreen> {
         childAspectRatio: 0.8,
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
-        children: <Widget>[
-          _buildBentoItem(
+        children: displayTools.map((Map<String, dynamic> tool) {
+          return _buildBentoItem(
             context,
-            'PDF to Word',
-            Icons.description_rounded,
-            AppColors.primary,
-          ),
-          _buildBentoItem(
-            context,
-            'Merge',
-            Icons.merge_type_rounded,
-            AppColors.primary,
-          ),
-          _buildBentoItem(
-            context,
-            'Compress',
-            Icons.compress_rounded,
-            AppColors.primary,
-          ),
-          _buildBentoItem(
-            context,
-            'Protect',
-            Icons.lock_rounded,
-            AppColors.primary,
-          ),
-          _buildBentoItem(
-            context,
-            'eSign',
-            Icons.draw_rounded,
-            AppColors.primary,
-          ),
-          _buildBentoItem(
-            context,
-            'OCR',
-            Icons.text_fields_rounded,
-            AppColors.primary,
-          ),
-          _buildBentoItem(
-            context,
-            'Organize',
-            Icons.grid_view_rounded,
-            AppColors.primary,
-          ),
-          _buildBentoItem(
-            context,
-            'Split',
-            Icons.call_split_rounded,
-            AppColors.primary,
-          ),
-        ],
+            tool['name'] as String,
+            tool['icon'] as IconData,
+            tool['color'] as Color,
+            onTap: () {
+              _openToolsForTool(context, tool['name'] as String);
+            },
+          );
+        }).toList(),
       ),
     );
   }
@@ -313,12 +458,14 @@ class _HomeScreenState extends State<HomeScreen> {
     BuildContext context,
     String label,
     IconData icon,
-    Color color,
-  ) {
+    Color color, {
+    required VoidCallback onTap,
+  }) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
+
       child: Column(
         children: <Widget>[
           Expanded(

@@ -521,73 +521,118 @@ class _ScannerScreenState extends State<ScannerScreen> {
 
   Widget _buildEmptyState() {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            height: 200,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              gradient: RadialGradient(
-                colors: <Color>[
-                  AppColors.primary.withValues(alpha: 0.1),
-                  Colors.transparent,
-                ],
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
+          child: ConstrainedBox(
+            // Ensures we never overflow vertically and we keep the content within the available space.
+            constraints: BoxConstraints(
+              minHeight: constraints.maxHeight,
+              maxHeight: constraints.maxHeight,
+            ),
+            child: IntrinsicHeight(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: RadialGradient(
+                          colors: <Color>[
+                            AppColors.primary.withValues(alpha: 0.1),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                      child: Lottie.asset(
+                        'assets/animations/multifile.json',
+                        alignment: Alignment.center,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+                    Text(
+                      'Smart Document Scanner',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w700,
+                        color: isDark
+                            ? AppColors.textPrimaryDark
+                            : AppColors.textPrimary,
+                        letterSpacing: -0.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        'Turn your physical documents into professional PDFs with AI-powered enhancement.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: isDark
+                              ? AppColors.textSecondaryDark
+                              : AppColors.textSecondary,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 32),
+
+                    // Responsive button row using Row with Flexible widgets
+                    // - Prevents wrapping by using flex layout
+                    // - Adapts to screen width with proper constraints
+                    // - Ensures buttons stay side-by-side on all devices
+                    LayoutBuilder(
+                      builder: (BuildContext context, BoxConstraints constraints) {
+                        final double screenWidth = constraints.maxWidth;
+                        final bool isSmallScreen = screenWidth < 360;
+                        
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Flexible(
+                              flex: 1,
+                              child: SizedBox(
+                                width: isSmallScreen ? null : 160,
+                                child: _buildOptionButton(
+                                  icon: Icons.document_scanner_rounded,
+                                  label: 'Doc Scanner',
+                                  onTap: _openDocumentScanner,
+                                  isPrimary: true,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: isSmallScreen ? 12 : 20),
+                            Flexible(
+                              flex: 1,
+                              child: SizedBox(
+                                width: isSmallScreen ? null : 160,
+                                child: _buildOptionButton(
+                                  icon: Icons.photo_library_rounded,
+                                  label: 'Gallery',
+                                  onTap: _pickFromGallery,
+                                  isPrimary: false,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-            child: Lottie.asset(
-              'assets/animations/multifile.json',
-              alignment: Alignment.center,
-              fit: BoxFit.contain,
-            ),
           ),
-          const SizedBox(height: 32),
-          Text(
-            'Smart Document Scanner',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
-              color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
-              letterSpacing: -0.5,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            child: Text(
-              'Turn your physical documents into professional PDFs with AI-powered enhancement.',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 15,
-                color: isDark
-                    ? AppColors.textSecondaryDark
-                    : AppColors.textSecondary,
-                height: 1.5,
-              ),
-            ),
-          ),
-          const SizedBox(height: 48),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              _buildOptionButton(
-                icon: Icons.document_scanner_rounded,
-                label: 'Doc Scanner',
-                onTap: _openDocumentScanner,
-                isPrimary: true,
-              ),
-              const SizedBox(width: 20),
-              _buildOptionButton(
-                icon: Icons.photo_library_rounded,
-                label: 'Gallery',
-                onTap: _pickFromGallery,
-                isPrimary: false,
-              ),
-            ],
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -598,61 +643,72 @@ class _ScannerScreenState extends State<ScannerScreen> {
     required bool isPrimary,
   }) {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        decoration: BoxDecoration(
-          color: isPrimary
-              ? AppColors.primary
-              : (isDark ? AppColors.surfaceDark : AppColors.surface),
-          borderRadius: BorderRadius.circular(24),
-          border: isPrimary
-              ? null
-              : Border.all(
-                  color: isDark ? AppColors.borderDark : AppColors.border,
-                  width: 1,
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double buttonWidth = constraints.maxWidth;
+        final bool isSmallButton = buttonWidth < 140;
+        
+        return GestureDetector(
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: EdgeInsets.symmetric(
+              horizontal: isSmallButton ? 16 : 24,
+              vertical: isSmallButton ? 16 : 20,
+            ),
+            decoration: BoxDecoration(
+              color: isPrimary
+                  ? AppColors.primary
+                  : (isDark ? AppColors.surfaceDark : AppColors.surface),
+              borderRadius: BorderRadius.circular(isSmallButton ? 20 : 24),
+              border: isPrimary
+                  ? null
+                  : Border.all(
+                      color: isDark ? AppColors.borderDark : AppColors.border,
+                      width: 1,
+                    ),
+              boxShadow: <BoxShadow>[
+                if (isPrimary)
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, 10),
+                  )
+                else
+                  BoxShadow(
+                    color: isDark ? Colors.black26 : AppColors.shadow,
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  icon,
+                  color: isPrimary ? Colors.white : AppColors.primary,
+                  size: isSmallButton ? 28 : 32,
                 ),
-          boxShadow: <BoxShadow>[
-            if (isPrimary)
-              BoxShadow(
-                color: AppColors.primary.withValues(alpha: 0.3),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              )
-            else
-              BoxShadow(
-                color: isDark ? Colors.black26 : AppColors.shadow,
-                blurRadius: 15,
-                offset: const Offset(0, 8),
-              ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              icon,
-              color: isPrimary ? Colors.white : AppColors.primary,
-              size: 32,
+                SizedBox(height: isSmallButton ? 8 : 12),
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: isPrimary
+                        ? Colors.white
+                        : (isDark
+                              ? AppColors.textPrimaryDark
+                              : AppColors.textPrimary),
+                    fontSize: isSmallButton ? 11 : 13,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            Text(
-              label,
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                color: isPrimary
-                    ? Colors.white
-                    : (isDark
-                          ? AppColors.textPrimaryDark
-                          : AppColors.textPrimary),
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
